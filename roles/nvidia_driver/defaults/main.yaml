@@ -1,0 +1,23 @@
+---
+# NVIDIA repository URL
+nvidia_driver_repo_url: "https://developer.download.nvidia.com/compute/cuda/repos/rhel9/"
+
+# NVIDIA Driver module version to install
+nvidia_driver_module_version: "open-dkms"
+
+# Whether to install CUDA drivers (cuda-drivers package)
+nvidia_driver_install_cuda_drivers: true
+
+# Whether to install NVIDIA Container Tools RPM
+nvidia_driver_install_container_tools: true
+nvidia_driver_generate_cdi_config: true
+
+# Whether to install NVIDIA Management Library RPM
+nvidia_driver_install_management_library: true
+nvidia_driver_management_library_package_name: "libnvidia-ml"
+
+# Whether to blacklist nouveau driver
+nvidia_driver_blacklist_nouveau: true
+
+# Whether to force install NVIDIA driver (NOTE: THIS IS FOR DEBUGGING ONLY AND IS NOT EXPECTED TO WORK [yet?])
+nvidia_driver_force_install: false

@@ -1,0 +1,41 @@
+---
+- name: Deal with nouveau driver
+  when: nvidia_driver_blacklist_nouveau | bool
+  block:
+    - name: Blacklist nouveau kernel module
+      ansible.builtin.blockinfile:
+        block: |
+          blacklist nouveau
+        path: /etc/modprobe.d/blacklist.conf
+        mode: "0644"
+        create: true
+
+    - name: Remove nouveau kernel module if loaded
+      ansible.builtin.command: modprobe -r nouveau
+      failed_when: false
+      changed_when: false
+
+- name: Add EPEL repository for DKMS support (if needed)
+  ansible.builtin.yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/9/Everything/$basearch/
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9
+  when: "'dkms' in nvidia_driver_module_version"
+
+- name: Enable nvidia-driver RPM module
+  ansible.builtin.dnf:
+    name: "@nvidia-driver:{{ nvidia_driver_module_version }}"
+    state: present
+
+- name: Install the nvidia CUDA driver
+  ansible.builtin.dnf:
+    name: cuda-drivers
+    state: present
+  when: nvidia_driver_install_cuda_drivers
+
+- name: Refresh package facts after driver installation
+  ansible.builtin.package_facts:
+    manager: rpm

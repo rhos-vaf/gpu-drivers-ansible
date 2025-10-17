@@ -1,0 +1,8 @@
+---
+- name: Install NVIDIA Drivers
+  hosts: gpu_servers
+  become: true
+  roles:
+    - nvidia_driver
+  vars:
+    nvidia_driver_module_version: "latest-dkms"
