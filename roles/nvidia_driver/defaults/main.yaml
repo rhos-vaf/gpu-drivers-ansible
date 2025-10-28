@@ -10,6 +10,7 @@ nvidia_driver_install_cuda_drivers: true
 
 # Whether to install NVIDIA Container Tools RPM
 nvidia_driver_install_container_tools: true
+nvidia_driver_container_tools_version_release: 1.17.8-1
 nvidia_driver_generate_cdi_config: true
 
 # Whether to install NVIDIA Management Library RPM
@@ -21,3 +22,5 @@ nvidia_driver_blacklist_nouveau: true
 
 # Whether to force install NVIDIA driver (NOTE: THIS IS FOR DEBUGGING ONLY AND IS NOT EXPECTED TO WORK [yet?])
 nvidia_driver_force_install: false
+
+# [string] libnvidia-container-toolkit version

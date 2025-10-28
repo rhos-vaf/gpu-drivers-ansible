@@ -1,7 +1,7 @@
 ---
 - name: Install NVIDIA Container Tools RPM
   ansible.builtin.dnf:
-    name: "nvidia-container-toolkit-{{ gpu_validation_libnvidia_container_toolkit_version_release }}"
+    name: "nvidia-container-toolkit-{{ nvidia_driver_container_tools_version_release }}"
     state: present
 
 - name: Check if CDI configfile exists

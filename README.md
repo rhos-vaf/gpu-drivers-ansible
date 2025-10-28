@@ -16,6 +16,7 @@ Ansible roles for installing gpu drivers on RHEL 9 systems.
 | `nvidia_driver_module_version` | `"open-dkms"` | NVIDIA Driver module version to install |
 | `nvidia_driver_install_cuda_drivers` | `true` | Whether to install CUDA drivers (cuda-drivers package) |
 | `nvidia_driver_install_container_tools` | `true` | Whether to install container tools (and CDI config) |
+| `nvidia_driver_container_tools_version_release` | `1.17.8-1` | Version of the container tools to install |
 | `nvidia_driver_generate_cdi_config` | `true` | Whether to generate the CDI config file |
 | `nvidia_driver_install_management_library` | `true` | Whether to install management library (NVML) |
 | `nvidia_driver_management_library_package_name` | `libnvidia-ml` | This package is called "nvidia-driver-NVML" in older versions |
