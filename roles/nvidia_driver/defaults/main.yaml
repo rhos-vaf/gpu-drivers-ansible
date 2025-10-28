@@ -2,8 +2,11 @@
 # NVIDIA repository URL
 nvidia_driver_repo_url: "https://developer.download.nvidia.com/compute/cuda/repos/rhel9/"
 
-# NVIDIA Driver module version to install
+# NVIDIA Driver module version to install from NVIDIA repo
 nvidia_driver_module_version: "open-dkms"
+
+# Custom NVIDIA driver URL (if set, driver will be installed from this URL instead of NVIDIA repo)
+nvidia_driver_url: ""
 
 # Whether to install CUDA drivers (cuda-drivers package)
 nvidia_driver_install_cuda_drivers: true
@@ -22,5 +25,3 @@ nvidia_driver_blacklist_nouveau: true
 
 # Whether to force install NVIDIA driver (NOTE: THIS IS FOR DEBUGGING ONLY AND IS NOT EXPECTED TO WORK [yet?])
 nvidia_driver_force_install: false
-
-# [string] libnvidia-container-toolkit version
