@@ -13,6 +13,7 @@ Ansible roles for installing gpu drivers on RHEL 9 systems.
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `nvidia_driver_repo_url` | `"https://developer.download.nvidia.com/compute/cuda/repos/rhel9/"` | NVIDIA repository URL |
+| `nvidia_driver_url` | "" | Install from a URL instead of a repo |
 | `nvidia_driver_module_version` | `"open-dkms"` | NVIDIA Driver module version to install |
 | `nvidia_driver_install_cuda_drivers` | `true` | Whether to install CUDA drivers (cuda-drivers package) |
 | `nvidia_driver_install_container_tools` | `true` | Whether to install container tools (and CDI config) |

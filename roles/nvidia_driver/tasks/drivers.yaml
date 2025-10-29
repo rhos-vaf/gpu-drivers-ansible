@@ -25,16 +25,40 @@
     gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9
   when: "'dkms' in nvidia_driver_module_version"
 
-- name: Enable nvidia-driver RPM module
-  ansible.builtin.dnf:
-    name: "@nvidia-driver:{{ nvidia_driver_module_version }}"
-    state: present
+- name: Install NVIDIA driver from repository
+  when: nvidia_driver_url == ""
+  block:
+    - name: Enable nvidia-driver RPM module
+      ansible.builtin.dnf:
+        name: "@nvidia-driver:{{ nvidia_driver_module_version }}"
+        state: present
 
-- name: Install the nvidia CUDA driver
-  ansible.builtin.dnf:
-    name: cuda-drivers
-    state: present
-  when: nvidia_driver_install_cuda_drivers
+    - name: Install the nvidia CUDA driver
+      ansible.builtin.dnf:
+        name: cuda-drivers
+        state: present
+      when: nvidia_driver_install_cuda_drivers
+
+- name: Install NVIDIA driver from custom driver
+  when: nvidia_driver_url != ""
+  block:
+    - name: Download NVIDIA driver RPM from custom URL
+      ansible.builtin.get_url:
+        url: "{{ nvidia_driver_url }}"
+        dest: /tmp/nvidia-driver.rpm
+        mode: '0644'
+        validate_certs: false
+
+    - name: Install NVIDIA driver RPM
+      ansible.builtin.dnf:
+        name: /tmp/nvidia-driver.rpm
+        state: present
+        disable_gpg_check: true
+
+    - name: Clean up downloaded RPM
+      ansible.builtin.file:
+        path: /tmp/nvidia-driver.rpm
+        state: absent
 
 - name: Refresh package facts after driver installation
   ansible.builtin.package_facts:
