@@ -39,25 +39,66 @@
         state: present
       when: nvidia_driver_install_cuda_drivers
 
-- name: Install NVIDIA driver from custom driver
+- name: Install NVIDIA driver from custom URL
   when: nvidia_driver_url != ""
   block:
-    - name: Download NVIDIA driver RPM from custom URL
+    - name: Extract filename from URL
+      ansible.builtin.set_fact:
+        _nvidia_driver_filename: "{{ nvidia_driver_url.split('/')[-1] }}"
+
+    - name: Check if custom driver URL has allowable extension
+      ansible.builtin.assert:
+        that: _nvidia_driver_filename | regex_search('\\.(rpm|run)$') is not none
+        fail_msg: "nvidia_driver_url must end with .rpm or .run extension. Current URL: {{ nvidia_driver_url }}"
+
+    - name: Create temporary directory for driver download
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: nvidia_driver
+      register: _nvidia_driver_temp_dir
+
+    - name: Set temporary file path
+      ansible.builtin.set_fact:
+        _nvidia_driver_temp_path: "{{ _nvidia_driver_temp_dir.path }}/{{ _nvidia_driver_filename }}"
+
+    - name: Check if custom driver URL is a .run file
+      ansible.builtin.set_fact:
+        _nvidia_driver_is_run_file: "{{ _nvidia_driver_filename | regex_search('\\.run$') is not none }}"
+
+    - name: Download NVIDIA driver from custom URL
       ansible.builtin.get_url:
         url: "{{ nvidia_driver_url }}"
-        dest: /tmp/nvidia-driver.rpm
-        mode: '0644'
+        dest: "{{ _nvidia_driver_temp_path }}"
+        mode: "{{ '0755' if _nvidia_driver_is_run_file else '0644' }}"
         validate_certs: false
 
-    - name: Install NVIDIA driver RPM
+    - name: Install NVIDIA driver from RPM
+      when: not _nvidia_driver_is_run_file
       ansible.builtin.dnf:
-        name: /tmp/nvidia-driver.rpm
+        name: "{{ _nvidia_driver_temp_path }}"
         state: present
         disable_gpg_check: true
 
-    - name: Clean up downloaded RPM
+    - name: Install NVIDIA driver from .run file
+      when: _nvidia_driver_is_run_file
+      block:
+        - name: Install dependencies for .run driver installation
+          ansible.builtin.dnf:
+            name:
+              - pciutils
+              - gcc
+              - kernel-headers
+              - kernel-devel
+            state: present
+
+        - name: Execute .run file
+          ansible.builtin.command: "{{ _nvidia_driver_temp_path }} --no-dkms -q"
+          args:
+            creates: /usr/bin/nvidia-smi
+
+    - name: Clean up temporary directory
       ansible.builtin.file:
-        path: /tmp/nvidia-driver.rpm
+        path: "{{ _nvidia_driver_temp_dir.path }}"
         state: absent
 
 - name: Refresh package facts after driver installation
