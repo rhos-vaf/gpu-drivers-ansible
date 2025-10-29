@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: Chris Sibbitt
+  description: Ansible role for installing NVIDIA GPU drivers on RHEL systems
+  license: LICENSE.txt
+  min_ansible_version: "2.9"
+  platforms:
+    - name: EL
+      versions:
+        - "9"
+  galaxy_tags:
+    - nvidia
+    - gpu
+    - drivers
+    - cuda
+    - rhel
+
+dependencies: []
+
