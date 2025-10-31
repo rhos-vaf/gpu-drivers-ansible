@@ -22,6 +22,8 @@ Ansible roles for installing gpu drivers on RHEL 9 systems.
 | `nvidia_driver_install_management_library` | `true` | Whether to install management library (NVML) |
 | `nvidia_driver_management_library_package_name` | `libnvidia-ml` | This package is called "nvidia-driver-NVML" in older versions |
 | `nvidia_driver_blacklist_nouveau` | `true` | Whether to blacklist nouveau driver |
+| `nvidia_driver_cleanup_temp_files` | `true` | Whether to cleanup temporary files after driver installation |
+| `nvidia_driver_force_host_mode` | `false` | Force host mode installation. When enabled, CUDA installation and CDI generation will be skipped |
 
 ## Example usage
 

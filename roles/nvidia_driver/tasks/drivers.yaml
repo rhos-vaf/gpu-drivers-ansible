@@ -31,7 +31,6 @@
     - ansible.builtin.dnf:
         name: "@nvidia-driver:{{ nvidia_driver_module_version }}"
         state: present
-      when: nvidia_driver_url == ""
 
     - name: Install the nvidia CUDA driver
       ansible.builtin.dnf:
@@ -45,6 +44,11 @@
     - name: Extract filename from URL
       ansible.builtin.set_fact:
         _nvidia_driver_filename: "{{ nvidia_driver_url.split('/')[-1] }}"
+
+    - name: Determine driver mode from filename or force_host_mode
+      ansible.builtin.set_fact:
+        _nvidia_driver_is_host_mode: >-
+          {{ (nvidia_driver_force_host_mode | bool) or ('host' in _nvidia_driver_filename | lower) }}
 
     - name: Check if custom driver URL has allowable extension
       ansible.builtin.assert:

@@ -10,7 +10,11 @@
   register: nvidia_driver_cdi_config_file
 
 - name: Configure NVIDIA container runtime
-  when: (nvidia_driver_generate_cdi_config | bool) and not nvidia_driver_cdi_config_file.stat.exists
+  when:
+    - nvidia_driver_generate_cdi_config | bool
+    - not nvidia_driver_cdi_config_file.stat.exists
+    - not (_nvidia_driver_is_host_mode | bool)
+
   block:
     - name: Ensure CDI directory exists
       ansible.builtin.file:
