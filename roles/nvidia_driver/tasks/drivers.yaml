@@ -82,13 +82,22 @@
     - name: Install NVIDIA driver from .run file
       when: _nvidia_driver_is_run_file
       block:
+        - name: Get running kernel version
+          ansible.builtin.command: uname -r
+          register: _nvidia_driver_kernel_version_result
+          changed_when: false
+
+        - name: Set kernel version fact
+          ansible.builtin.set_fact:
+            _nvidia_driver_kernel_version: "{{ _nvidia_driver_kernel_version_result.stdout | replace('.x86_64', '') }}"
+
         - name: Install dependencies for .run driver installation
           ansible.builtin.dnf:
             name:
               - pciutils
               - gcc
-              - kernel-headers
-              - kernel-devel
+              - "kernel-headers-{{ _nvidia_driver_kernel_version }}"
+              - "kernel-devel-{{ _nvidia_driver_kernel_version }}"
             state: present
 
         - name: Execute .run file
