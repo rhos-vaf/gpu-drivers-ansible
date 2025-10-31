@@ -1,4 +1,8 @@
 ---
+- name: Set driver mode (default to guest mode)
+  ansible.builtin.set_fact:
+    _nvidia_driver_is_host_mode: "{{ nvidia_driver_force_host_mode | bool }}"
+
 - name: Deal with nouveau driver
   when: nvidia_driver_blacklist_nouveau | bool
   block:
