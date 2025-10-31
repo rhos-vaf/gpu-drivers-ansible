@@ -26,18 +26,10 @@
   when: "'dkms' in nvidia_driver_module_version"
 
 - name: Install NVIDIA driver from repository
+  ansible.builtin.dnf:
+    name: "@nvidia-driver:{{ nvidia_driver_module_version }}"
+    state: present
   when: nvidia_driver_url == ""
-  block:
-    - name: Enable nvidia-driver RPM module
-      ansible.builtin.dnf:
-        name: "@nvidia-driver:{{ nvidia_driver_module_version }}"
-        state: present
-
-    - name: Install the nvidia CUDA driver
-      ansible.builtin.dnf:
-        name: cuda-drivers
-        state: present
-      when: nvidia_driver_install_cuda_drivers
 
 - name: Install NVIDIA driver from custom URL
   when: nvidia_driver_url != ""
@@ -109,6 +101,12 @@
       ansible.builtin.file:
         path: "{{ _nvidia_driver_temp_dir.path }}"
         state: absent
+
+- name: Install the nvidia CUDA driver
+  ansible.builtin.dnf:
+    name: cuda-drivers
+    state: present
+  when: nvidia_driver_install_cuda_drivers
 
 - name: Refresh package facts after driver installation
   ansible.builtin.package_facts:
