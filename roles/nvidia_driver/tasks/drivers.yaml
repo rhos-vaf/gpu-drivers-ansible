@@ -101,7 +101,7 @@
             state: present
 
         - name: Execute .run file
-          ansible.builtin.command: "{{ _nvidia_driver_temp_path }} --no-dkms -q"
+          ansible.builtin.command: "{{ _nvidia_driver_temp_path }} --no-dkms --no-disable-nouveau --silent"
           args:
             creates: /usr/bin/nvidia-smi
 
