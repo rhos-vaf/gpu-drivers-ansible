@@ -101,6 +101,7 @@
       ansible.builtin.file:
         path: "{{ _nvidia_driver_temp_dir.path }}"
         state: absent
+      when: nvidia_driver_cleanup_temp_files | bool
 
 - name: Install the nvidia CUDA driver
   ansible.builtin.dnf:

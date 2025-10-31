@@ -8,6 +8,9 @@ nvidia_driver_module_version: "open-dkms"
 # Custom NVIDIA driver URL (if set, driver will be installed from this URL instead of NVIDIA repo)
 nvidia_driver_url: ""
 
+# Whether to cleanup temporary files
+nvidia_driver_cleanup_temp_files: true
+
 # Whether to install CUDA drivers (cuda-drivers package)
 nvidia_driver_install_cuda_drivers: true
 
