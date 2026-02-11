@@ -1,3 +1,9 @@
+# ! DEPRECATED !
+This code has migrated into the RHOSO EDPM Ansible repo, here: https://github.com/openstack-k8s-operators/edpm-ansible/tree/main/roles/edpm_accel_drivers
+
+This repo will be archived after [gpu-validation](https://github.com/rhos-vaf/gpu-validation/blob/main/requirements.yaml#L9) has migrated (OSPRH-22196)
+# ! DEPRECATED !
+
 # gpu-drivers-ansible
 
 Ansible roles for installing gpu drivers on RHEL 9 systems.
